@@ -1,3 +1,4 @@
 /prerecorded_voices/
 *.wav
 *.mp3
+*.pyc

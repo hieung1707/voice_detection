@@ -1,14 +1,18 @@
-import wave
-import pyaudio
+import threading
 
 
-def create_stream(file_path):
-    f = wave.open(file_path, "rb")
-    # instantiate PyAudio
-    p = pyaudio.PyAudio()
-    # open stream
-    stream = p.open(format=p.get_format_from_width(f.getsampwidth()),
-                    channels=f.getnchannels(),
-                    rate=f.getframerate(),
-                    output=True)
-    return stream
+class SoundLoaderThread(threading.Thread):
+    def __init__(self, agi):
+        super(SoundLoaderThread, self).__init__()
+        self.agi = agi
+        self._stop_event = threading.Event
+
+    def stop(self):
+        self._stop_event.set()
+
+    def stopped(self):
+        return self._stop_event.is_set()
+
+    def playAudio(self, file_path):
+        self.agi.stream_file(file_path)
+        self.start()

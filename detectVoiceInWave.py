@@ -2,9 +2,11 @@ from vad import VoiceActivityDetector
 import argparse
 import json
 
+
 def save_to_file(data, filename):
     with open(filename, 'w') as fp:
         json.dump(data, fp)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Analyze input wave-file and save detected speech interval to json file.')

@@ -67,5 +67,3 @@ def stt():
     status, intent = get_intent(text)
     intent_received = 'status: ' + str(status) + '; intent: ' + intent
     return text_received, intent_received
-
-stt()

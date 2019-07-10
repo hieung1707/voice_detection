@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 import requests
 import json
-import os
+from asterisk.agi import *
 
 record_path = '/home/hieung1707/'
 record_file = 'sample.mp3'
+
 API_KEY = "a93d3a127f9c4ee89015f0f46ca02d47"
 API_TOKEN_BOT = "720052620754ec80808f6f86510358fb"
 
@@ -61,9 +62,16 @@ def get_intent(text):
 
 def stt():
     status, text = speech_recognition(audio_to_byte())
-    text_received = 'status: ' + str(status) + '; text:' + text
     if text == '':
-        return 'không có text', ""
+        return text, ''
     status, intent = get_intent(text)
-    intent_received = 'status: ' + str(status) + '; intent: ' + intent
-    return text_received, intent_received
+    return text, intent
+
+
+if __name__ == "__main__":
+    agi = AGI()
+    # record_path = '/tmp/'
+    # record_file = agi.get_variable('CALLERID(num)') + '-trimmed-33.wav'
+    text, intent = stt()
+    agi.verbose('text: ' + text)
+    agi.verbose('intent: ' + intent)

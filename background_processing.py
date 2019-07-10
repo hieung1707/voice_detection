@@ -1,11 +1,12 @@
 import numpy as np
+from scipy.signal import stft
 
-sample_window_time = 0.05
-sample_overlap_time = 0.025
-speech_window = 0.5
-speech_energy_threshold = 0.7
-speech_start_band = 50
-speech_end_band = 8000
+sample_window_time = 0.005
+sample_overlap_time = 0.0025
+speech_window = 0.05
+speech_energy_threshold = 0.4
+speech_start_band = 80.0
+speech_end_band = 500.0
 rate = 8000.0
 
 
@@ -23,7 +24,7 @@ def _calculate_amplitude(audio_data):
 
 def _calculate_energy(data):
     data_amplitude = _calculate_amplitude(data)
-    data_energy = data_amplitude ** 2
+    data_energy = data_amplitude
     return data_energy
 
 
@@ -78,20 +79,12 @@ def detect_speech(data):
     and total energy.
     Output is array of window numbers and speech flags (1 - speech, 0 - nonspeech).
     """
-    detected_windows = np.array([])
-    sample_window = int(rate * sample_window_time)
-    sample_start = 0
-    sample_end = sample_start + sample_window if sample_start + sample_window <= len(data) else len(data)
     start_band = speech_start_band
     end_band = speech_end_band
-    data_window = data[sample_start:sample_end]
-    energy_freq = _calculate_normalized_energy(data_window)
+    energy_freq = _calculate_normalized_energy(data)
     sum_voice_energy = _sum_energy_in_band(energy_freq, start_band, end_band)
     sum_full_energy = sum(energy_freq.values())
     speech_ratio = sum_voice_energy / sum_full_energy
     # Hipothesis is that when there is a speech sequence we have ratio of energies more than Threshold
     speech_ratio = speech_ratio > speech_energy_threshold
-    detected_windows = np.append(detected_windows, [sample_start, speech_ratio])
-    detected_windows = detected_windows.reshape(int(len(detected_windows) / 2), 2)  # type: None
-    detected_windows[:, 1] = _smooth_speech_detection(detected_windows)
-    return speech_ratio, detected_windows
+    return speech_ratio

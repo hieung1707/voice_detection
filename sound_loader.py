@@ -1,18 +1,8 @@
-import threading
+from scipy.io import wavfile
+import numpy as np
 
-
-class SoundLoaderThread(threading.Thread):
-    def __init__(self, agi):
-        super(SoundLoaderThread, self).__init__()
-        self.agi = agi
-        self._stop_event = threading.Event
-
-    def stop(self):
-        self._stop_event.set()
-
-    def stopped(self):
-        return self._stop_event.is_set()
-
-    def playAudio(self, file_path):
-        self.agi.stream_file(file_path)
-        self.start()
+fs = 8000.0
+T = 5.0
+nsamples = int(T *fs)
+a = np.zeros(nsamples, np.int16)
+wavfile.write('waiting.wav', int(fs), a)

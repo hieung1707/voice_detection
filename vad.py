@@ -11,7 +11,7 @@ class VoiceActivityDetector():
         self.data = data
         self.rate = 8000.0
         self.channels = 1
-        self.sample_window = 0.05 # 20 ms
+        self.sample_window = 0.05  # 20 ms
         self.sample_overlap = 0.025  # 10ms
         self.speech_window = 0.5  # half a second
         self.speech_energy_threshold = 0.6  # 60% of energy in voice band

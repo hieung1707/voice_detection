@@ -75,10 +75,6 @@ def _smooth_speech_detection(detected_windows):
 
 
 def detect_speech(data):
-    """ Detects speech regions based on ratio between speech band energy
-    and total energy.
-    Output is array of window numbers and speech flags (1 - speech, 0 - nonspeech).
-    """
     start_band = speech_start_band
     end_band = speech_end_band
     energy_freq = _calculate_normalized_energy(data)
